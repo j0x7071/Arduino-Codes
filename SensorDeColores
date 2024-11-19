@@ -1,0 +1,127 @@
+
+#define S0 4		// S0 a pin 4
+#define S1 5		// S1 a pin 5
+#define S2 6		// S2 a pin 6
+#define S3 7		// S3 a pin 7
+#define salidaTCS 8	// salidaTCS a pin 8
+
+int ledwhite = 13 ;
+int ledblue = 12 ;
+int ledred = 11 ;
+int ledyellow = 10 ;
+int ledgreen = 3 ;
+
+
+void setup() {
+  pinMode(S0, OUTPUT);		// pin 4 como salida
+  pinMode(S1, OUTPUT);		// pin 5 como salida
+  pinMode(S2, OUTPUT);		// pin 6 como salida
+  pinMode(S3, OUTPUT);		// pin 7 como salida
+  pinMode(salidaTCS, INPUT);	// pin 8 como salida
+
+  pinMode(ledwhite, OUTPUT);		// pin 13 como salida
+  pinMode(ledyellow, OUTPUT);		// pin 11 como salida
+  pinMode(ledblue, OUTPUT);		// pin 10 como salida
+  pinMode(ledred, OUTPUT);		// pin 10 como salida
+  pinMode(ledgreen, OUTPUT);		// pin 3 como salida
+
+  digitalWrite(S0,HIGH);	// establece frecuencia de salida
+  digitalWrite(S1,LOW);		// del modulo al 20 por ciento
+  
+  Serial.begin(9600);		// inicializa monitor serie a 9600 bps
+}
+
+void loop() {
+  digitalWrite(S2,LOW);			// establece fotodiodos
+  digitalWrite(S3,LOW);			// con filtro rojo
+  int rojo = pulseIn(salidaTCS, LOW);	// obtiene duracion de pulso de salida del sensor
+  delay(200);				// demora de 200 mseg
+  
+  digitalWrite(S2,HIGH);		// establece fotodiodos
+  digitalWrite(S3,HIGH);		// con filtro verde
+  int verde = pulseIn(salidaTCS, LOW);	// obtiene duracion de pulso de salida del sensor
+  delay(200);				// demora de 200 mseg
+  
+  digitalWrite(S2,LOW);			// establece fotodiodos
+  digitalWrite(S3,HIGH);		// con filtro azul
+  int azul = pulseIn(salidaTCS, LOW);	// obtiene duracion de pulso de salida del sensor
+  delay(200);				// demora de 200 mseg
+  
+  Serial.print("R:");			// muestra texto
+  Serial.print(rojo);			// muestra valor de variable rojo
+
+  Serial.print("\t");			// espacio de tabulacion
+
+  Serial.print("V:");			// muestra texto
+  Serial.print(verde);			// muestra valor de variable verde
+
+  Serial.print("\t");			// espacio de tabulacion
+
+  Serial.print("A:");			// muestra texto
+  Serial.println(azul);			// muestra valor de variable azul
+  					// y salto de linea
+  if ( 23 < rojo && rojo < 27 && 27 < verde && verde < 32 && 19 < azul && azul < 23){		// si valores dentro del rango
+    Serial.println("ROJO");				// muestra texto
+    digitalWrite(ledred,HIGH);
+    digitalWrite(ledyellow,LOW);
+    digitalWrite(ledgreen,LOW);
+    digitalWrite(ledblue,LOW);
+    digitalWrite(ledwhite,LOW);
+    delay(200);
+  }
+    else if ( 21 < rojo && rojo < 25 && 24 < verde && verde < 28 && 18 < azul && azul < 22){	// si valores dentro del rango
+    Serial.println("AMARILLO");				// muestra texto
+    digitalWrite(ledred,LOW);
+    digitalWrite(ledyellow,HIGH);
+    digitalWrite(ledgreen,LOW);
+    digitalWrite(ledblue,LOW);
+    digitalWrite(ledwhite,LOW);
+    delay(200);
+  }   
+    else if ( 26 < rojo && rojo < 30 && 26 < verde && verde < 30 && 19 < azul && azul < 23){	// si valores dentro del rango
+    Serial.println("VERDE");				// muestra texto
+    digitalWrite(ledred,LOW);
+    digitalWrite(ledyellow,LOW);
+    digitalWrite(ledgreen,HIGH);
+    digitalWrite(ledblue,LOW);
+    digitalWrite(ledwhite,LOW);
+    delay(200);
+  }
+    else if ( 26 < rojo && rojo < 30 && 28 < verde && verde < 31 && 18 < azul && azul < 22){	// si valores dentrol del rango
+    Serial.println("AZUL");
+    digitalWrite(ledred,LOW);
+    digitalWrite(ledyellow,LOW);
+    digitalWrite(ledgreen,LOW);
+    digitalWrite(ledblue,HIGH);
+    digitalWrite(ledwhite,LOW);
+    delay(200);
+  }
+    else if ( 22 < rojo && rojo < 25 && 23 < verde && verde < 27 && 17 < azul && azul < 20 ){	// si valores dentrol del rango
+    Serial.println("BLANCO");				// muestra texto
+    digitalWrite(ledred,LOW);
+    digitalWrite(ledyellow,LOW);
+    digitalWrite(ledgreen,LOW);
+    digitalWrite(ledblue,LOW);
+    digitalWrite(ledwhite,HIGH);
+    delay(200);
+  }
+    else if ( 22 < rojo && rojo < 26 && 28 < verde && verde < 32 && 19 < azul && azul < 23){	// si valores dentrol del rango
+    Serial.println("NARANJA");
+    digitalWrite(ledred,HIGH);
+    digitalWrite(ledyellow,HIGH);
+    digitalWrite(ledgreen,LOW);
+    digitalWrite(ledblue,LOW);
+    digitalWrite(ledwhite,LOW);
+    delay(200);
+  }
+    else {
+    Serial.println("NONE");
+    digitalWrite(ledred,LOW);
+    digitalWrite(ledyellow,LOW);
+    digitalWrite(ledgreen,LOW);
+    digitalWrite(ledblue,LOW);
+    digitalWrite(ledwhite,LOW);
+    delay(200);
+  }
+
+}
